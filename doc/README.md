@@ -3,9 +3,9 @@ Hopium
 
 Setup
 ---------------------
-Hopium is a Hopium client and it builds the backbone of the network. However, it downloads and stores the entire history of Hopium transactions (which is currently several GBs); depending on the speed of your computer and network connection, the synchronization process can take anywhere from a few hours to a day or more.
+Hopium is a full-node client and forms part of the backbone of the network. It downloads and stores blockchain history; synchronization time depends on the age of the local chain, available peers, computer performance and network connection.
 
-To download Hopium, visit [hopiummore.org](https://europazeus.org).
+For current Hopium maintenance and release information, visit [EuropaZeus](https://europazeus.org).
 
 Running
 ---------------------
@@ -24,16 +24,12 @@ Unpack the files into a directory, and then run hopium-qt.exe.
 
 ### OS X
 
-Drag Hopium-More.app to your applications folder, and then run Hopium-More.
+Drag Hopium-Qt.app to your applications folder, and then run Hopium-Qt.
 
 ### Need Help?
 
-* See the documentation at the [Bitcoin Wiki](https://en.bitcoin.it/wiki/Main_Page)
-for help and more information.
-* Ask for help on [#hopium](http://webchat.freenode.net?channels=hopium) on Freenode. If you don't have an IRC client use [webchat here](http://webchat.freenode.net?channels=hopium).
-* Ask for help in [Hopium room](https://gitter.im/Hopium_Hub) on Gitter.
-* Ask for help in [/r/hopium/](https://nm.reddit.com/r/hopium/) on Reddit.
-* Ask for help on the [BitcoinTalk](https://bitcointalk.org/) forums, in the [Hopium topic](https://bitcointalk.org/index.php?topic=3017838.new#new).
+* Current maintenance information: [EuropaZeus](https://europazeus.org).
+* Maintained source location: [Xnuva Blockchain Project / Hopium](https://github.com/Xnuva-Blockchain-Project/Hopium).
 
 Building
 ---------------------
@@ -53,7 +49,7 @@ The Hopium repo's [root README](/README.md) contains relevant information on the
 - [Multiwallet Qt Development](multiwallet-qt.md)
 - [Release Notes](release-notes.md)
 - [Release Process](release-process.md)
-- [Source Code Documentation (External Link)](https://dev.visucore.com/bitcoin/doxygen/)
+- [Maintained Source Location](https://github.com/Xnuva-Blockchain-Project/Hopium)
 - [Translation Process](translation_process.md)
 - [Translation Strings Policy](translation_strings_policy.md)
 - [Unit Tests](unit-tests.md)
@@ -64,9 +60,8 @@ The Hopium repo's [root README](/README.md) contains relevant information on the
 - [Benchmarking](benchmarking.md)
 
 ### Resources
-* Discuss on the [BitcoinTalk](https://bitcointalk.org/) forums, in the [Hopium topic](https://bitcointalk.org/index.php?topic=3017838.new#new).
-* Discuss Hopium development in [Hopium room](https://gitter.im/Hopium_Hub) on Gitter.
-* Discuss Hopium development in [Hopium team](https://keybase.io/team/hopium) on Keybase.
+* Current maintenance information: [EuropaZeus](https://europazeus.org).
+* Development source location: [Xnuva Blockchain Project / Hopium](https://github.com/Xnuva-Blockchain-Project/Hopium).
 
 ### Miscellaneous
 - [Assets Attribution](assets-attribution.md)

@@ -18,4 +18,4 @@ However, it downloads and stores the entire history of Hopium transactions;
 depending on the speed of your computer and network connection, the synchronization
 process can take anywhere from a few hours to a day or more.
 
-See the Hopium website at https://europazeus.org for more help and information.
+For current Hopium maintenance information, see https://europazeus.org.

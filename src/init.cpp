@@ -495,7 +495,7 @@ std::string HelpMessage(HelpMessageMode mode)
 std::string LicenseInfo()
 {
     const std::string URL_SOURCE_CODE = "<https://github.com/Xnuva-Blockchain-Project/Hopium>";
-    const std::string URL_WEBSITE = "<https://hopium.org/>";
+    const std::string URL_WEBSITE = "<https://europazeus.org/>";
     // todo: remove urls from translations on next change
 
     // return FormatParagraph(strprintf(_("Copyright (C) %i-%i %s"), 2009, COPYRIGHT_YEAR, CopyrightHolders())) + "\n" +
@@ -795,7 +795,7 @@ void InitLogging()
     fLogIPs = GetBoolArg("-logips", DEFAULT_LOGIPS);
 
     LogPrintf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    LogPrintf("Hopium More version %s\n", FormatFullVersion());
+    LogPrintf("Hopium version %s\n", FormatFullVersion());
 }
 
 /** Initialize bitcoin.

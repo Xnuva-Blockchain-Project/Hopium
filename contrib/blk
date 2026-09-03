@@ -1,10 +1,10 @@
 #!/bin/bash
 
-usage="Usage: blk [ info | stake | latest | dust ] \n \n
+usage="Usage: blk [ info | stake | dust ] \n \n
 	info: Check basic info. \n
 	stake: Enables staking; Passes password without storing it in memory. \n
-	latest: Compares latest block with the HopiumNL hosted block explorer. \n
-	dust: Prunes dust from wallet. Dust is defined as less than .0001BLK. Requires jq. \n"
+	External explorer comparison is not provided by the maintained helper. \n
+	dust: Prunes dust from wallet. Dust is defined as less than .0001 HOPE. Requires jq. \n"
 
 blkc='/usr/local/bin/hopium-cli -datadir=/var/lib/.hopium/'
 
@@ -23,13 +23,6 @@ stake )
 	read -s BLKPW
 	$blkc walletpassphrase $BLKPW 99999999 true
 	BLKPW=null
-;;
-
-latest )
-	latest=$($blkc  getblockcount) && \
-	    blacksight=$(curl -s https://node.hopium.io/insight-api/block-index/$latest? |  cut -d '"' -f4) && \
-	    hopium=$($blkc  getblockhash $latest) && \
-	    diff -sy --label Local <(echo $hopium) --label Explorer <(echo $blacksight)
 ;;
 
 dust )

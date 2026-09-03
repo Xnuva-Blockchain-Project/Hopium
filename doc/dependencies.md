@@ -31,7 +31,6 @@ These are the dependencies currently used by Hopium. You can find instructions f
 
 Human help is also available from the following channels:
 
-Discord  - https://discord.gg/hjNUgWD
-Telegram - https://t.me/hopiumnl
-Keybase  - https://keybase.io/team/hopium/
+Maintenance - https://europazeus.org
+Source      - https://github.com/Xnuva-Blockchain-Project/Hopium
 

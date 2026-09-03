@@ -9,15 +9,15 @@ What is Hopium?
 Hopium is a decentralised digital currency with near-instant transaction speeds and negligible transaction fees built upon Proof of Stake 3.0 (PoSV3, BPoS) as
 introduced by the Hopium development team.
 
-For more information about Hopium itself, see https://hopium.org.
+Current Hopium maintenance information is published at https://europazeus.org.
 
-What is Hopium?
-----------------
+Software
+--------
 
 Hopium is the name of open source software which enables the use of this currency. It takes Hopium to the next level by building upon
 Bitcoin Core 0.13.2 with some patches from newer Bitcoin Core versions to offer performance enhancements, wider compatibility with third party services and a more advanced base.
 
-For more information, as well as an immediately useable, binary version of the Hopium software, see https://europazeus.org.
+For current maintenance and release information, see https://europazeus.org. The maintained source location is https://github.com/Xnuva-Blockchain-Project/Hopium.
 
 License
 -------
@@ -28,9 +28,9 @@ information or see https://opensource.org/licenses/MIT.
 Development Process
 -------------------
 
-The `master` branch is regularly built and tested, but is not guaranteed to be
-completely stable. [Tags](/tags) are created
-regularly to indicate new official, stable release versions of Hopium.
+Development branches may contain work that has not completed release
+qualification. Maintained release tags identify source states that have
+completed the project's release-validation process.
 
 Change log can be found in [CHANGELOG.md](CHANGELOG.md).
 
@@ -54,7 +54,7 @@ There are also [regression and integration tests](/qa) of the RPC interface, wri
 in Python, that are run automatically on the build server.
 These tests can be run (if the [test dependencies](/qa) are installed) with: `qa/pull-tester/rpc-tests.py`
 
-The Travis CI system makes sure that every pull request is built for Windows, Linux, and OS X, and that unit/sanity tests are run automatically.
+Maintained releases should complete clean builds, available automated tests and manual release validation before publication.
 
 ### Manual Quality Assurance (QA) Testing
 
