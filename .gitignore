@@ -183,3 +183,8 @@ src/qt/hopium-qt.creator
 src/qt/hopium-qt.creator.user
 src/qt/hopium-qt.files
 src/qt/hopium-qt.includes
+
+# Generated Autotools and compiler dependency state
+.deps/
+
+# Editor backup files
