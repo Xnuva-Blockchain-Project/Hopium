@@ -22,6 +22,7 @@
 
 #include <QApplication>
 #include <QCloseEvent>
+#include <QCursor>
 #include <QDesktopWidget>
 #include <QPainter>
 #include <QRadialGradient>
@@ -30,10 +31,12 @@ SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle *networkStyle) 
     QWidget(0, f), curAlignment(0)
 {
     // set reference point, paddings
-    int paddingRight            = 15;
-    int paddingTop              = 50;
-    int titleVersionVSpace      = 17;
-    int titleCopyrightVSpace    = 40;
+    int paddingTop              = 70;
+    int titleVersionVSpace      = 26;
+    int titleMaintenanceVSpace  = 50;
+    int titleCopyrightVSpace    = 88;
+    const int textLeft          = 325;
+    const int textWidth         = 295;
 
     float fontFactor            = 1.0;
     float devicePixelRatio      = 1.0;
@@ -42,13 +45,14 @@ SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle *networkStyle) 
 #endif
 
     // define text to place
-    QString titleText       = tr(PACKAGE_NAME);
+    QString titleText       = tr("Hopium Wallet");
     QString versionText     = QString("Version %1").arg(QString::fromStdString(FormatFullVersion()));
+    QString releaseText     = QString("2026 Maintained Release");
+    QString maintenanceText = QString("2026 Maintained by the Xnuva Blockchain Project");
 
     QString copyrightTextBitcoin     = QChar(0xA9)+QString(" %1-%2 ").arg(2009).arg(COPYRIGHT_YEAR) + QString("The Bitcoin Core developers");
     QString copyrightTextBlackcoin   = QChar(0xA9)+QString(" %1-%2 ").arg(2014).arg(2018) + QString("The Blackcoin developers");
     QString copyrightTextBlackmore   = QChar(0xA9)+QString(" %1-%2 ").arg(2018).arg(COPYRIGHT_YEAR) + QString("The Blackcoin More developers");
-    QString copyrightTextHopium   = QChar(0xA9)+QString(" %1 ").arg(2025) + QString("The Hopium developers");
     // QString copyrightText   = QChar(0xA9)+QString(" %1-%2 ").arg(2009).arg(COPYRIGHT_YEAR) + QString::fromStdString(CopyrightHolders());
 
     QString titleAddText    = networkStyle->getTitleAddText();
@@ -56,7 +60,7 @@ SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle *networkStyle) 
     QString font            = QApplication::font().toString();
 
     // create a bitmap according to device pixelratio
-    QSize splashSize(480*devicePixelRatio,320*devicePixelRatio);
+    QSize splashSize(640*devicePixelRatio,360*devicePixelRatio);
     pixmap = QPixmap(splashSize);
 
 #if QT_VERSION > 0x050100
@@ -75,7 +79,7 @@ SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle *networkStyle) 
     pixPaint.fillRect(rGradient, gradient);
 
     // draw the bitcoin icon, expected size of PNG: 1024x1024
-    QRect rectIcon(QPoint(-130,-102), QSize(430,430));
+    QRect rectIcon(QPoint(20,35), QSize(280,280));
 
     const QSize requiredSize(1024,1024);
     QPixmap icon(networkStyle->getAppIcon().pixmap(requiredSize));
@@ -86,35 +90,47 @@ SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle *networkStyle) 
     pixPaint.setFont(QFont(font, 33*fontFactor));
     QFontMetrics fm = pixPaint.fontMetrics();
     int titleTextWidth = fm.width(titleText);
-    if (titleTextWidth > 176) {
-        fontFactor = fontFactor * 176 / titleTextWidth;
+    if (titleTextWidth > textWidth) {
+        fontFactor = fontFactor * textWidth / titleTextWidth;
     }
 
     pixPaint.setFont(QFont(font, 33*fontFactor));
     fm = pixPaint.fontMetrics();
     titleTextWidth  = fm.width(titleText);
-    pixPaint.drawText(pixmap.width()/devicePixelRatio-titleTextWidth-paddingRight,paddingTop,titleText);
+    pixPaint.drawText(textLeft,paddingTop,titleText);
 
     pixPaint.setFont(QFont(font, 15*fontFactor));
 
     // if the version string is to long, reduce size
     fm = pixPaint.fontMetrics();
     int versionTextWidth  = fm.width(versionText);
-    if(versionTextWidth > titleTextWidth+paddingRight-10) {
+    if(versionTextWidth > textWidth) {
         pixPaint.setFont(QFont(font, 10*fontFactor));
         titleVersionVSpace -= 5;
     }
-    pixPaint.drawText(pixmap.width()/devicePixelRatio-titleTextWidth-paddingRight+2,paddingTop+titleVersionVSpace,versionText);
+    pixPaint.drawText(textLeft,paddingTop+titleVersionVSpace,versionText);
 
-    // draw copyright stuff
+    // Make the maintenance year immediately visible on startup.
+    pixPaint.setFont(QFont(font, 10*fontFactor));
+    pixPaint.drawText(textLeft,paddingTop+titleMaintenanceVSpace,releaseText);
+
+    // Draw historical copyright notices unchanged, followed by
+    // the current maintenance identity without claiming copyright.
     {
-        pixPaint.setFont(QFont(font, 10*fontFactor));
-        const int x = pixmap.width()/devicePixelRatio-titleTextWidth-paddingRight;
+        pixPaint.setFont(QFont(font, 9*fontFactor));
+        const int x = textLeft;
         const int y = paddingTop+titleCopyrightVSpace;
+
         pixPaint.drawText(x,y,copyrightTextBitcoin);
         pixPaint.drawText(x,y+10,copyrightTextBlackcoin);
         pixPaint.drawText(x,y+20,copyrightTextBlackmore);
-        pixPaint.drawText(x,y+30,copyrightTextHopium);
+
+        pixPaint.setFont(QFont(font, 8*fontFactor));
+        pixPaint.drawText(
+            QRect(x,y+34,textWidth,44),
+            Qt::AlignLeft | Qt::TextWordWrap,
+            maintenanceText
+        );
     }
 
     // draw additional text if special network
@@ -136,7 +152,14 @@ SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle *networkStyle) 
     QRect r(QPoint(), QSize(pixmap.size().width()/devicePixelRatio,pixmap.size().height()/devicePixelRatio));
     resize(r.size());
     setFixedSize(r.size());
-    move(QApplication::desktop()->screenGeometry().center() - r.center());
+    QDesktopWidget *desktop = QApplication::desktop();
+    int screenNumber = desktop->screenNumber(QCursor::pos());
+
+    if (screenNumber < 0)
+        screenNumber = desktop->primaryScreen();
+
+    const QRect screenGeometry = desktop->availableGeometry(screenNumber);
+    move(screenGeometry.center() - r.center());
 
     subscribeToCoreSignals();
 }
