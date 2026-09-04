@@ -19,6 +19,7 @@
 #include "test/test_bitcoin.h"
 
 #include <boost/test/unit_test.hpp>
+#include "pow.h"
 
 BOOST_FIXTURE_TEST_SUITE(miner_tests, TestingSetup)
 
@@ -88,20 +89,20 @@ void TestPackageSelection(const CChainParams& chainparams, CScript scriptPubKey,
     tx.vin[0].prevout.hash = txFirst[0]->GetHash();
     tx.vin[0].prevout.n = 0;
     tx.vout.resize(1);
-    tx.vout[0].nValue = 5000000000LL - 1000;
+    tx.vout[0].nValue = (10 * COIN) - 1000;
     // This tx has a low fee: 1000 satoshis
     uint256 hashParentTx = tx.GetHash(); // save this txid for later use
     mempool.addUnchecked(hashParentTx, entry.Fee(1000).Time(GetTime()).SpendsCoinbase(true).FromTx(tx));
 
     // This tx has a medium fee: 10000 satoshis
     tx.vin[0].prevout.hash = txFirst[1]->GetHash();
-    tx.vout[0].nValue = 5000000000LL - 10000;
+    tx.vout[0].nValue = (10 * COIN) - 10000;
     uint256 hashMediumFeeTx = tx.GetHash();
     mempool.addUnchecked(hashMediumFeeTx, entry.Fee(10000).Time(GetTime()).SpendsCoinbase(true).FromTx(tx));
 
     // This tx has a high fee, but depends on the first transaction
     tx.vin[0].prevout.hash = hashParentTx;
-    tx.vout[0].nValue = 5000000000LL - 1000 - 50000; // 50k satoshi fee
+    tx.vout[0].nValue = (10 * COIN) - 1000 - 50000; // 50k satoshi fee
     uint256 hashHighFeeTx = tx.GetHash();
     mempool.addUnchecked(hashHighFeeTx, entry.Fee(50000).Time(GetTime()).SpendsCoinbase(false).FromTx(tx));
 
@@ -112,7 +113,7 @@ void TestPackageSelection(const CChainParams& chainparams, CScript scriptPubKey,
 
     // Test that a package below the min relay fee doesn't get included
     tx.vin[0].prevout.hash = hashHighFeeTx;
-    tx.vout[0].nValue = 5000000000LL - 1000 - 50000; // 0 fee
+    tx.vout[0].nValue = (10 * COIN) - 1000 - 50000; // 0 fee
     uint256 hashFreeTx = tx.GetHash();
     mempool.addUnchecked(hashFreeTx, entry.Fee(0).FromTx(tx));
     size_t freeTxSize = ::GetSerializeSize(tx, SER_NETWORK, PROTOCOL_VERSION);
@@ -122,7 +123,7 @@ void TestPackageSelection(const CChainParams& chainparams, CScript scriptPubKey,
     CAmount feeToUse = minRelayTxFee.GetFee(2*freeTxSize) - 1;
 
     tx.vin[0].prevout.hash = hashFreeTx;
-    tx.vout[0].nValue = 5000000000LL - 1000 - 50000 - feeToUse;
+    tx.vout[0].nValue = (10 * COIN) - 1000 - 50000 - feeToUse;
     uint256 hashLowFeeTx = tx.GetHash();
     mempool.addUnchecked(hashLowFeeTx, entry.Fee(feeToUse).FromTx(tx));
     pblocktemplate = BlockAssembler(chainparams).CreateNewBlock(scriptPubKey);
@@ -149,8 +150,8 @@ void TestPackageSelection(const CChainParams& chainparams, CScript scriptPubKey,
     // Add a 0-fee transaction that has 2 outputs.
     tx.vin[0].prevout.hash = txFirst[2]->GetHash();
     tx.vout.resize(2);
-    tx.vout[0].nValue = 5000000000LL - 100000000;
-    tx.vout[1].nValue = 100000000; // 1BTC output
+    tx.vout[0].nValue = (10 * COIN) - 100000000;
+    tx.vout[1].nValue = 100000000; // 1-coin output
     uint256 hashFreeTx2 = tx.GetHash();
     mempool.addUnchecked(hashFreeTx2, entry.Fee(0).SpendsCoinbase(true).FromTx(tx));
 
@@ -158,7 +159,7 @@ void TestPackageSelection(const CChainParams& chainparams, CScript scriptPubKey,
     tx.vin[0].prevout.hash = hashFreeTx2;
     tx.vout.resize(1);
     feeToUse = minRelayTxFee.GetFee(freeTxSize);
-    tx.vout[0].nValue = 5000000000LL - 100000000 - feeToUse;
+    tx.vout[0].nValue = (10 * COIN) - 100000000 - feeToUse;
     uint256 hashLowFeeTx2 = tx.GetHash();
     mempool.addUnchecked(hashLowFeeTx2, entry.Fee(feeToUse).SpendsCoinbase(false).FromTx(tx));
     pblocktemplate = BlockAssembler(chainparams).CreateNewBlock(scriptPubKey);
@@ -183,7 +184,12 @@ BOOST_AUTO_TEST_CASE(CreateNewBlock_validity)
 {
     // Note that by default, these tests run with size accounting enabled.
     const CChainParams& chainparams = Params(CBaseChainParams::MAIN);
-    CScript scriptPubKey = CScript() << ParseHex("049554e0fcd422e6c935b37ccc5155c9f641517cefaceb4cc4873cd6f65b409de41e4888f7028761ac2cb8888ef9f319f88b6168583e92f8eae571e05a8184e664") << OP_CHECKSIG;
+    // Test-only spendable output preserving one legacy SigOp.
+    // CHECKSIG is deliberately placed in an unexecuted branch so the
+    // synthetic miner transactions remain script-valid while retaining
+    // the inherited "1000 CHECKMULTISIG + 1" SigOps boundary.
+    CScript scriptPubKey = CScript()
+        << OP_0 << OP_IF << OP_CHECKSIG << OP_ENDIF << OP_1;
     CBlockTemplate *pblocktemplate;
     CMutableTransaction tx,tx2;
     CScript script;
@@ -196,45 +202,160 @@ BOOST_AUTO_TEST_CASE(CreateNewBlock_validity)
     LOCK(cs_main);
     fCheckpointsEnabled = false;
 
+    /*
+     * Hopium's inherited Bitcoin miner fixture originally used
+     * precomputed SHA256 block nonces. Hopium validates PoW with
+     * scrypt, so mining 100 mainnet-target blocks inside a unit test
+     * is both stale and unnecessarily expensive.
+     *
+     * Relax only the in-process test PoW limit and disable retargeting
+     * for this test case. The real consensus parameters are restored
+     * automatically before the fixture lock is released.
+     */
+    Consensus::Params& testConsensus =
+        const_cast<Consensus::Params&>(chainparams.GetConsensus());
+
+    struct ScopedPowParams
+    {
+        Consensus::Params& params;
+        uint256 oldPowLimit;
+        bool oldPowNoRetargeting;
+
+        explicit ScopedPowParams(Consensus::Params& p)
+            : params(p),
+              oldPowLimit(p.powLimit),
+              oldPowNoRetargeting(p.fPowNoRetargeting)
+        {
+        }
+
+        ~ScopedPowParams()
+        {
+            params.powLimit = oldPowLimit;
+            params.fPowNoRetargeting = oldPowNoRetargeting;
+        }
+    } scopedPowParams(testConsensus);
+
+    testConsensus.powLimit =
+        uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+    testConsensus.fPowNoRetargeting = true;
+
     // Simple block creation, nothing special yet:
     BOOST_CHECK(pblocktemplate = BlockAssembler(chainparams).CreateNewBlock(scriptPubKey));
 
-    // We can't make transactions until we have inputs
-    // Therefore, load 100 blocks :)
-    int baseheight = 0;
-    std::vector<CTransaction*>txFirst;
-    for (unsigned int i = 0; i < sizeof(blockinfo)/sizeof(*blockinfo); ++i)
-    {
-        CBlock *pblock = &pblocktemplate->block; // pointer for convenience
-        pblock->nVersion = 1;
-        pblock->nTime = chainActive.Tip()->GetPastTimeLimit()+1;
-        CMutableTransaction txCoinbase(pblock->vtx[0]);
-        txCoinbase.nVersion = 1;
-        txCoinbase.vin[0].scriptSig = CScript();
-        txCoinbase.vin[0].scriptSig.push_back(blockinfo[i].extranonce);
-        txCoinbase.vin[0].scriptSig.push_back(chainActive.Height());
-        txCoinbase.vout.resize(1);
-        txCoinbase.vout[0].scriptPubKey = CScript();
-        pblock->vtx[0] = CTransaction(txCoinbase);
-        if (txFirst.size() == 0)
-            baseheight = chainActive.Height();
-        if (txFirst.size() < 4)
-            txFirst.push_back(new CTransaction(pblock->vtx[0]));
-        pblock->hashMerkleRoot = BlockMerkleRoot(*pblock);
-        pblock->nNonce = blockinfo[i].nonce;
-        CValidationState state;
-        BOOST_CHECK(ProcessNewBlock(state, chainparams, NULL, pblock, true, NULL, false));
-        BOOST_CHECK(state.IsValid());
-        pblock->hashPrevBlock = pblock->GetHash();
-    }
+    // We can't make transactions until we have inputs.
+    //
+    // The inherited Bitcoin fixture manually reused one block
+    // template plus historical extranonce/nonce values.
+    // Construct every bootstrap block afresh from Hopium's
+    // current active tip instead.
+    int baseheight = chainActive.Height();
+    std::vector<CTransaction*> txFirst;
+
+    const unsigned int bootstrapBlocks =
+        sizeof(blockinfo) / sizeof(*blockinfo);
+
     delete pblocktemplate;
+    pblocktemplate = NULL;
+
+    unsigned int extraNonce = 0;
+
+    for (unsigned int i = 0; i < bootstrapBlocks; ++i)
+    {
+        const int heightBefore = chainActive.Height();
+        const uint256 tipBefore =
+            chainActive.Tip()->GetBlockHash();
+
+        pblocktemplate =
+            BlockAssembler(chainparams).CreateNewBlock(
+                scriptPubKey);
+
+        BOOST_REQUIRE(pblocktemplate != NULL);
+
+        CBlock *pblock = &pblocktemplate->block;
+
+        // Every synthetic block must extend the actual active tip.
+        BOOST_REQUIRE(
+            pblock->hashPrevBlock == tipBefore);
+
+        /*
+         * BlockAssembler supplies the transaction set and header
+         * context.  Match Hopium's existing test-chain construction:
+         * finalize the coinbase and merkle root before mining.
+         */
+        IncrementExtraNonce(
+            pblock,
+            chainActive.Tip(),
+            extraNonce);
+
+        BOOST_REQUIRE(
+            pblock->hashMerkleRoot
+            == BlockMerkleRoot(*pblock));
+
+        // Mine the nonce against the test-scoped easy target.
+        pblock->nNonce = 0;
+
+        while (!CheckProofOfWork(
+                   pblock->GetPoWHash(),
+                   pblock->nBits,
+                   chainparams.GetConsensus()))
+        {
+            ++pblock->nNonce;
+        }
+
+        CValidationState state;
+
+        const bool accepted =
+            ProcessNewBlock(
+                state,
+                chainparams,
+                NULL,
+                pblock,
+                true,
+                NULL,
+                false);
+
+        BOOST_REQUIRE_MESSAGE(
+            accepted,
+            "Hopium bootstrap rejection"
+            << " i=" << i
+            << " reason=" << state.GetRejectReason());
+
+        BOOST_REQUIRE(state.IsValid());
+
+        // Do not accept a sibling/fork as successful bootstrap.
+        BOOST_REQUIRE_EQUAL(
+            chainActive.Height(),
+            heightBefore + 1);
+
+        BOOST_REQUIRE(
+            chainActive.Tip()->GetBlockHash()
+            == pblock->GetHash());
+
+        // Height 1 is the historical premine.  Preserve four
+        // ordinary 10-HOPE PoW coinbases for downstream tests.
+        if ((heightBefore + 1) >= 2 &&
+            txFirst.size() < 4)
+        {
+            BOOST_REQUIRE_EQUAL(
+                pblock->vtx[0].vout[0].nValue,
+                10 * COIN);
+
+            txFirst.push_back(
+                new CTransaction(pblock->vtx[0]));
+        }
+
+        delete pblocktemplate;
+        pblocktemplate = NULL;
+    }
+
+    BOOST_REQUIRE_EQUAL(txFirst.size(), 4U);
 
     // Just to make sure we can still make simple blocks
     BOOST_CHECK(pblocktemplate = BlockAssembler(chainparams).CreateNewBlock(scriptPubKey));
     delete pblocktemplate;
 
-    const CAmount BLOCKSUBSIDY = 50*COIN;
-    const CAmount LOWFEE = CENT;
+    const CAmount BLOCKSUBSIDY = 10*COIN;
+    const CAmount LOWFEE = COIN / 10000;
     const CAmount HIGHFEE = COIN;
     const CAmount HIGHERFEE = 4*COIN;
 
@@ -295,8 +416,11 @@ BOOST_AUTO_TEST_CASE(CreateNewBlock_validity)
     mempool.clear();
 
     // orphan in mempool, template creation fails
+    // The preceding block-size fixture leaves tx deliberately large.
+    // Use a high test-only mempool fee so BlockAssembler selects the
+    // orphan and self-validation can exercise the missing-input failure.
     hash = tx.GetHash();
-    mempool.addUnchecked(hash, entry.Fee(LOWFEE).Time(GetTime()).FromTx(tx));
+    mempool.addUnchecked(hash, entry.Fee(HIGHFEE).Time(GetTime()).FromTx(tx));
     BOOST_CHECK_THROW(BlockAssembler(chainparams).CreateNewBlock(scriptPubKey), std::runtime_error);
     mempool.clear();
 
@@ -359,42 +483,11 @@ BOOST_AUTO_TEST_CASE(CreateNewBlock_validity)
     BOOST_CHECK_THROW(BlockAssembler(chainparams).CreateNewBlock(scriptPubKey), std::runtime_error);
     mempool.clear();
 
-    // subsidy changing
-    int nHeight = chainActive.Height();
-    // Create an actual 209999-long block chain (without valid blocks).
-    while (chainActive.Tip()->nHeight < 209999) {
-        CBlockIndex* prev = chainActive.Tip();
-        CBlockIndex* next = new CBlockIndex();
-        next->phashBlock = new uint256(GetRandHash());
-        pcoinsTip->SetBestBlock(next->GetBlockHash());
-        next->pprev = prev;
-        next->nHeight = prev->nHeight + 1;
-        next->BuildSkip();
-        chainActive.SetTip(next);
-    }
-    BOOST_CHECK(pblocktemplate = BlockAssembler(chainparams).CreateNewBlock(scriptPubKey));
-    delete pblocktemplate;
-    // Extend to a 210000-long block chain.
-    while (chainActive.Tip()->nHeight < 210000) {
-        CBlockIndex* prev = chainActive.Tip();
-        CBlockIndex* next = new CBlockIndex();
-        next->phashBlock = new uint256(GetRandHash());
-        pcoinsTip->SetBestBlock(next->GetBlockHash());
-        next->pprev = prev;
-        next->nHeight = prev->nHeight + 1;
-        next->BuildSkip();
-        chainActive.SetTip(next);
-    }
-    BOOST_CHECK(pblocktemplate = BlockAssembler(chainparams).CreateNewBlock(scriptPubKey));
-    delete pblocktemplate;
-    // Delete the dummy blocks again.
-    while (chainActive.Tip()->nHeight > nHeight) {
-        CBlockIndex* del = chainActive.Tip();
-        chainActive.SetTip(del->pprev);
-        pcoinsTip->SetBestBlock(del->pprev->GetBlockHash());
-        delete del->phashBlock;
-        delete del;
-    }
+    // Hopium has no Bitcoin-style 210000-block PoW subsidy
+    // transition. Height 1 is the historical premine and ordinary
+    // subsequent PoW blocks use Hopium's normal fixed PoW reward.
+    // The inherited synthetic 209999/210000 chain fixture therefore
+    // does not apply to Hopium.
 
     // non-final txs in mempool
     SetMockTime(chainActive.Tip()->GetPastTimeLimit()+1);

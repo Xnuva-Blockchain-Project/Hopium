@@ -78,81 +78,81 @@ void URITests::uriTestsCashAddr() {
     QUrl uri;
     QString scheme =
         QString::fromStdString(Params(CBaseChainParams::MAIN).CashAddrPrefix());
-    uri.setUrl(QString("hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a?"
+    uri.setUrl(QString("hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt?"
                        "req-dontexist="));
     QVERIFY(!GUIUtil::parseBitcoinURI(scheme, uri, &rv));
 
     uri.setUrl(QString(
-        "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a?dontexist="));
+        "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt?dontexist="));
     QVERIFY(GUIUtil::parseBitcoinURI(scheme, uri, &rv));
     QVERIFY(rv.address ==
-            QString("hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a"));
+            QString("hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt"));
     QVERIFY(rv.label == QString());
     QVERIFY(rv.amount == 0);
 
     uri.setUrl(
-        QString("hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a?label="
+        QString("hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt?label="
                 "Wikipedia Example Address"));
     QVERIFY(GUIUtil::parseBitcoinURI(scheme, uri, &rv));
     QVERIFY(rv.address ==
-            QString("hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a"));
+            QString("hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt"));
     QVERIFY(rv.label == QString("Wikipedia Example Address"));
     QVERIFY(rv.amount == 0);
 
     uri.setUrl(QString(
-        "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a?amount=0.001"));
+        "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt?amount=0.001"));
     QVERIFY(GUIUtil::parseBitcoinURI(scheme, uri, &rv));
     QVERIFY(rv.address ==
-            QString("hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a"));
+            QString("hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt"));
     QVERIFY(rv.label == QString());
     QVERIFY(rv.amount == 100000);
 
     uri.setUrl(QString(
-        "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a?amount=1.001"));
+        "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt?amount=1.001"));
     QVERIFY(GUIUtil::parseBitcoinURI(scheme, uri, &rv));
     QVERIFY(rv.address ==
-            QString("hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a"));
+            QString("hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt"));
     QVERIFY(rv.label == QString());
     QVERIFY(rv.amount == 100100000);
 
     uri.setUrl(QString(
-        "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a?amount=100&"
+        "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt?amount=100&"
         "label=Wikipedia Example"));
     QVERIFY(GUIUtil::parseBitcoinURI(scheme, uri, &rv));
     QVERIFY(rv.address ==
-            QString("hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a"));
+            QString("hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt"));
     QVERIFY(rv.amount == 10000000000LL);
     QVERIFY(rv.label == QString("Wikipedia Example"));
 
     uri.setUrl(QString(
-        "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a?message="
+        "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt?message="
         "Wikipedia Example Address"));
     QVERIFY(GUIUtil::parseBitcoinURI(scheme, uri, &rv));
     QVERIFY(rv.address ==
-            QString("hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a"));
+            QString("hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt"));
     QVERIFY(rv.label == QString());
 
     QVERIFY(GUIUtil::parseBitcoinURI(
         scheme, "hopium://"
-                "qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a?"
+                "qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt?"
                 "message=Wikipedia Example Address",
         &rv));
     QVERIFY(rv.address ==
-            QString("hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a"));
+            QString("hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt"));
     QVERIFY(rv.label == QString());
 
     uri.setUrl(QString(
-        "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a?req-message="
+        "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt?req-message="
         "Wikipedia Example Address"));
     QVERIFY(GUIUtil::parseBitcoinURI(scheme, uri, &rv));
 
     uri.setUrl(QString(
-        "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a?amount=1,"
+        "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt?amount=1,"
         "000&label=Wikipedia Example"));
     QVERIFY(!GUIUtil::parseBitcoinURI(scheme, uri, &rv));
 
     uri.setUrl(QString(
-        "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a?amount=1,"
+        "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt?amount=1,"
         "000.0&label=Wikipedia Example"));
     QVERIFY(!GUIUtil::parseBitcoinURI(scheme, uri, &rv));
 }
@@ -177,10 +177,10 @@ void URITests::uriTestFormatURI() {
     {
         UriTestConfig cfg(true);
         SendCoinsRecipient r;
-        r.address = "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a";
+        r.address = "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt";
         r.message = "test";
         QString uri = GUIUtil::formatBitcoinURI(cfg, r);
-        QVERIFY(uri == "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a?"
+        QVERIFY(uri == "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt?"
                        "message=test");
     }
 

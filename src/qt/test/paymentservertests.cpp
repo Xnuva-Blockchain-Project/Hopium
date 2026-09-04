@@ -79,12 +79,12 @@ void PaymentServerTests::paymentServerTests()
 
     // Now feed PaymentRequests to server, and observe signals it produces
 
-    // This payment request validates directly against the
-    // caCert1 certificate authority:
+    // Historical caCert1 fixture expired on 2022-12-08.
+    // Production certificate validation must now reject it:
     data = DecodeBase64(paymentrequest1_cert1_BASE64);
     r = handleRequest(server, data);
     r.paymentRequest.getMerchant(caStore, merchant);
-    QCOMPARE(merchant, QString("testmerchant.org"));
+    QCOMPARE(merchant, QString(""));
 
     // Signed, but expired, merchant cert in the request:
     data = DecodeBase64(paymentrequest2_cert1_BASE64);
@@ -92,11 +92,12 @@ void PaymentServerTests::paymentServerTests()
     r.paymentRequest.getMerchant(caStore, merchant);
     QCOMPARE(merchant, QString(""));
 
-    // 10-long certificate chain, all intermediates valid:
+    // Historical 10-long certificate chain is now outside its
+    // certificate validity period and must be rejected:
     data = DecodeBase64(paymentrequest3_cert1_BASE64);
     r = handleRequest(server, data);
     r.paymentRequest.getMerchant(caStore, merchant);
-    QCOMPARE(merchant, QString("testmerchant8.org"));
+    QCOMPARE(merchant, QString(""));
 
     // Long certificate chain, with an expired certificate in the middle:
     data = DecodeBase64(paymentrequest4_cert1_BASE64);
@@ -188,7 +189,9 @@ void PaymentServerTests::paymentServerTests()
     // compares 50001 <= BIP70_MAX_PAYMENTREQUEST_SIZE == false
     QCOMPARE(PaymentServer::verifySize(tempFile.size()), false);
 
-    // Payment request with amount overflow (amount is set to 21000001 BTC):
+    // The inherited fixture contains 21,000,001 coin units. This exceeded
+    // Bitcoin's historical monetary bound, but is valid under Hopium's
+    // historical MoneyRange where MAX_MONEY is INT64_MAX.
     data = DecodeBase64(paymentrequest5_cert2_BASE64);
     byteArray = QByteArray((const char*)&data[0], data.size());
     r.paymentRequest.parse(byteArray);
@@ -198,9 +201,14 @@ void PaymentServerTests::paymentServerTests()
     QList<std::pair<CScript, CAmount> > sendingTos = r.paymentRequest.getPayTo();
     Q_FOREACH (const PAIRTYPE(CScript, CAmount)& sendingTo, sendingTos) {
         CTxDestination dest;
-        if (ExtractDestination(sendingTo.first, dest))
-            QCOMPARE(PaymentServer::verifyAmount(sendingTo.second), false);
+        if (ExtractDestination(sendingTo.first, dest)) {
+            QCOMPARE(sendingTo.second, CAmount(21000001LL * COIN));
+            QCOMPARE(PaymentServer::verifyAmount(sendingTo.second), true);
+        }
     }
+
+    // Preserve rejection-path coverage using a representable invalid CAmount.
+    QCOMPARE(PaymentServer::verifyAmount(CAmount(-1)), false);
 
     delete server;
 }

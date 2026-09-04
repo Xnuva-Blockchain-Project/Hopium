@@ -46,8 +46,8 @@ bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
 BOOST_AUTO_TEST_CASE(cashaddr_testvectors_valid)
 {
     static const std::string CASES[] = {
-        "prefix:x64nx6hz", "PREFIX:X64NX6HZ", "p:gpf8m4h7", "hopium:qpzry9x8gf2tvdw0s3jn54khce6mua7lcw20ayyn",
-        "hopetest:testnetaddress4d6njnut", "hopereg:555555555555555555555555555555555555555555555udxmlmrz",
+        "prefix:x64nx6hz", "PREFIX:X64NX6HZ", "p:gpf8m4h7", "hopium:qpzry9x8gf2tvdw0s3jn54khce6mua7la42v5lwm",
+        "hopetest:testnetaddressjz47jh0h", "hopereg:555555555555555555555555555555555555555555555gwqx85u5",
     };
 
     for (const std::string &str : CASES)
@@ -94,9 +94,9 @@ BOOST_AUTO_TEST_CASE(cashaddr_rawencode)
 BOOST_AUTO_TEST_CASE(cashaddr_testvectors_noprefix)
 {
     static const std::pair<std::string, std::string> CASES[] = {
-        {"hopium", "qpzry9x8gf2tvdw0s3jn54khce6mua7lcw20ayyn"}, {"prefix", "x64nx6hz"}, {"PREFIX", "X64NX6HZ"},
-        {"p", "gpf8m4h7"}, {"hopium", "qpzry9x8gf2tvdw0s3jn54khce6mua7lcw20ayyn"},
-        {"hopetest", "testnetaddress4d6njnut"}, {"hopereg", "555555555555555555555555555555555555555555555udxmlmrz"},
+        {"hopium", "qpzry9x8gf2tvdw0s3jn54khce6mua7la42v5lwm"}, {"prefix", "x64nx6hz"}, {"PREFIX", "X64NX6HZ"},
+        {"p", "gpf8m4h7"}, {"hopium", "qpzry9x8gf2tvdw0s3jn54khce6mua7la42v5lwm"},
+        {"hopetest", "testnetaddressjz47jh0h"}, {"hopereg", "555555555555555555555555555555555555555555555gwqx85u5"},
     };
 
     for (const std::pair<std::string, std::string> &c : CASES)

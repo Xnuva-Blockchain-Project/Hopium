@@ -16,6 +16,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <univalue.h>
+#include "util.h"
 
 using namespace std;
 
@@ -64,6 +65,17 @@ BOOST_AUTO_TEST_CASE(rpc_addmultisig)
 
 BOOST_AUTO_TEST_CASE(rpc_wallet)
 {
+    struct MapArgsRestore
+    {
+        decltype(mapArgs) saved;
+
+        MapArgsRestore() : saved(mapArgs) {}
+        ~MapArgsRestore() { mapArgs = saved; }
+    } mapArgsRestore;
+
+    mapArgs["-enableaccounts"] = "1";
+    mapArgs["-staking"] = "0";
+
     // Test RPC calls for various wallet statistics
     UniValue r;
     CPubKey demoPubkey;
@@ -204,7 +216,7 @@ BOOST_AUTO_TEST_CASE(rpc_wallet)
     /* Illegal address */
     BOOST_CHECK_THROW(CallRPC("verifymessage 1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4X " + retValue.get_str() + " mymessage"), runtime_error);
     /* wrong address */
-    BOOST_CHECK(CallRPC("verifymessage 1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XZ " + retValue.get_str() + " mymessage").get_bool() == false);
+    BOOST_CHECK(CallRPC("verifymessage HJXhEuJASX1qpuZ5J1s9ojHdgoThT2wQNQ " + retValue.get_str() + " mymessage").get_bool() == false);
     /* Correct address and signature but wrong message */
     BOOST_CHECK(CallRPC("verifymessage " + EncodeDestination(demoAddress) + " " + retValue.get_str() + " wrongmessage").get_bool() == false);
     /* Correct address, message and signature*/

@@ -34,11 +34,11 @@ BOOST_AUTO_TEST_CASE(test_addresses) {
     const CTxDestination dstScript = CScriptID(uint160(hash));
 
     std::string cashaddr_pubkey =
-        "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a";
+        "hopium:qpm2qsznhks23z7629mms6s4cwef74vcwveuwjtsdt";
     std::string cashaddr_script =
-        "hopium:ppm2qsznhks23z7629mms6s4cwef74vcwvn0h829pq";
-    std::string base58_pubkey = "1BpEi6DfDAUFd7GtittLSdBeYJvcoaVggu";
-    std::string base58_script = "3CWFddi6m4ndiGyKqzYvsFYagqDLPVMTzC";
+        "hopium:ppm2qsznhks23z7629mms6s4cwef74vcwvwenavnkk";
+    std::string base58_pubkey = "HHLN6S9BcP1JLSrMhgD5qe57iVEMFMLCBT";
+    std::string base58_script = "Hgfy5YSUKZUB9szSj6YQKmLuLzVHvWfR2J";
 
     const CChainParams &params = Params(CBaseChainParams::MAIN);
     DstCfgDummy cfg;

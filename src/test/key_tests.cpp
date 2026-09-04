@@ -19,14 +19,14 @@
 
 using namespace std;
 
-static const std::string strSecret1 = "5HxWvvfubhXpYYpS3tJkw6fq9jE9j18THftkZjHHfmFiWtmAbrj";
-static const std::string strSecret2 = "5KC4ejrDjv152FGwP386VD1i2NYc5KkfSMyv1nGy1VGDxGHqVY3";
-static const std::string strSecret1C = "Kwr371tjA9u2rFSMZjTNun2PXXP3WPZu2afRHTcta6KxEUdm1vEw";
-static const std::string strSecret2C = "L3Hq7a8FEQwJkW1M2GNKDW28546Vp5miewcCzSqUD9kCAXrJdS3g";
-static const std::string addr1 = "1QFqqMUD55ZV3PJEJZtaKCsQmjLT6JkjvJ";
-static const std::string addr2 = "1F5y5E5FMc5YzdJtB9hLaUe43GDxEKXENJ";
-static const std::string addr1C = "1NoJrossxPBKfCHuJXT4HadJrXRE9Fxiqs";
-static const std::string addr2C = "1CRj2HyM1CXWzHAXLQtiGLyggNT9WQqsDs";
+static const std::string strSecret1 = "6diHzCdBgiaswN4eK58j5veonHrsjAqUmEj4Kio9RyXEFiMrGVX";
+static const std::string strSecret2 = "6ewqi1oVpw48R4X9eDx4e2zgewBL5VTguvpDmmnpmhXjh9gozUQ";
+static const std::string strSecret1C = "Rs3FyUJiAJYXpwy5gmF6kjosUuR8u8QyYFadfdUgDEURVibS56vn";
+static const std::string strSecret2C = "RxV3z2YEEZaojCY59JA34Toc2S8bCpcoAcXRNchFrHtfRmqZN6Yz";
+static const std::string addr1 = "HVmyDhPjUJ6XkishHMDKiDkswueBaXtcGo";
+static const std::string addr2 = "HLc6TZzmkpcbhxtM9w25yVXXDSXgfzkQb2";
+static const std::string addr1C = "HUKSF9oQMbiNNXsNHJmogbWn2hixdLH9F3";
+static const std::string addr2C = "HHwrQdtsQR4ZhcjzKCDTfMs9rYkstt69D4";
 
 static const std::string strAddressBad = "1HV9Lc3sNHZxwj4Zk6fB38tEmBryq2cBiF";
 

@@ -15,8 +15,8 @@ using namespace std;
 
 BOOST_FIXTURE_TEST_SUITE(pow_tests, BasicTestingSetup)
 
-/* Test calculation of next difficulty target with no constraints applying */
-BOOST_AUTO_TEST_CASE(get_next_work)
+/* Test Hopium legacy-spacing retarget result for inherited fixture ending at height 32255. */
+BOOST_AUTO_TEST_CASE(retarget_historical_fixture_32255)
 {
     SelectParams(CBaseChainParams::MAIN);
     const Consensus::Params& params = Params().GetConsensus();
@@ -26,11 +26,11 @@ BOOST_AUTO_TEST_CASE(get_next_work)
     pindexLast.nHeight = 32255;
     pindexLast.nTime = 1262152739;  // Block #32255
     pindexLast.nBits = 0x1d00ffff;
-    BOOST_CHECK_EQUAL(CalculateNextTargetRequired(&pindexLast, nLastRetargetTime, params, false), 0x1d00d86a);
+    BOOST_CHECK_EQUAL(CalculateNextTargetRequired(&pindexLast, nLastRetargetTime, params, false), 0x1e0226b3);
 }
 
-/* Test the constraint on the upper bound for next work */
-BOOST_AUTO_TEST_CASE(get_next_work_pow_limit)
+/* Test Hopium legacy-spacing retarget result for inherited fixture ending at height 2015. */
+BOOST_AUTO_TEST_CASE(retarget_historical_fixture_2015)
 {
     SelectParams(CBaseChainParams::MAIN);
     const Consensus::Params& params = Params().GetConsensus();
@@ -40,11 +40,11 @@ BOOST_AUTO_TEST_CASE(get_next_work_pow_limit)
     pindexLast.nHeight = 2015;
     pindexLast.nTime = 1233061996;  // Block #2015
     pindexLast.nBits = 0x1d00ffff;
-    BOOST_CHECK_EQUAL(CalculateNextTargetRequired(&pindexLast, nLastRetargetTime, params, false), 0x1d00ffff);
+    BOOST_CHECK_EQUAL(CalculateNextTargetRequired(&pindexLast, nLastRetargetTime, params, false), 0x1e045205);
 }
 
-/* Test the constraint on the lower bound for actual time taken */
-BOOST_AUTO_TEST_CASE(get_next_work_lower_limit_actual)
+/* Test Hopium legacy-spacing retarget result for inherited fixture ending at height 68543. */
+BOOST_AUTO_TEST_CASE(retarget_historical_fixture_68543)
 {
     SelectParams(CBaseChainParams::MAIN);
     const Consensus::Params& params = Params().GetConsensus();
@@ -54,11 +54,11 @@ BOOST_AUTO_TEST_CASE(get_next_work_lower_limit_actual)
     pindexLast.nHeight = 68543;
     pindexLast.nTime = 1279297671;  // Block #68543
     pindexLast.nBits = 0x1c05a3f4;
-    BOOST_CHECK_EQUAL(CalculateNextTargetRequired(&pindexLast, nLastRetargetTime, params, false), 0x1c0168fd);
+    BOOST_CHECK_EQUAL(CalculateNextTargetRequired(&pindexLast, nLastRetargetTime, params, false), 0x1d0372fb);
 }
 
-/* Test the constraint on the upper bound for actual time taken */
-BOOST_AUTO_TEST_CASE(get_next_work_upper_limit_actual)
+/* Test Hopium legacy-spacing retarget result for inherited fixture ending at height 46367. */
+BOOST_AUTO_TEST_CASE(retarget_historical_fixture_46367)
 {
     SelectParams(CBaseChainParams::MAIN);
     const Consensus::Params& params = Params().GetConsensus();
@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE(get_next_work_upper_limit_actual)
     pindexLast.nHeight = 46367;
     pindexLast.nTime = 1269211443;  // Block #46367
     pindexLast.nBits = 0x1c387f6f;
-    BOOST_CHECK_EQUAL(CalculateNextTargetRequired(&pindexLast, nLastRetargetTime, params, false), 0x1d00e1fd);
+    BOOST_CHECK_EQUAL(CalculateNextTargetRequired(&pindexLast, nLastRetargetTime, params, false), 0x1e02cdd1);
 }
 
 BOOST_AUTO_TEST_CASE(GetBlockProofEquivalentTime_test)

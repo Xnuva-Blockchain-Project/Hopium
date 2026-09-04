@@ -19,15 +19,15 @@ void BitcoinAddressValidatorTests::inputTests() {
     QVERIFY(QValidator::Invalid == v.validate(in, unused));
 
     // invalid base58, invalid cashaddr
-    in = "BITCOINCASHH";
+    in = "HOPIUMM";
     QVERIFY(QValidator::Invalid == v.validate(in, unused));
 
     // invalid base58 because of I, but could be a cashaddr prefix
-    in = "BITC";
+    in = "HOPI";
     QVERIFY(QValidator::Acceptable == v.validate(in, unused));
 
     // invalid base58, valid cashaddr
-    in = "BITCOINCASH:QP";
+    in = "HOPIUM:QP";
     QVERIFY(QValidator::Acceptable == v.validate(in, unused));
 
     // valid base58, invalid cash

@@ -2,6 +2,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include <arith_uint256.h>
 #include <blockencodings.h>
 #include <consensus/merkle.h>
 #include <chainparams.h>
@@ -32,7 +33,7 @@ static CBlock BuildBlockTestCase() {
     block.nVersion = 42;
     block.nTime = tx.nTime;
     block.hashPrevBlock = GetRandHash();
-    block.nBits = 0x207fffff;
+    block.nBits = UintToArith256(Params().GetConsensus().powLimit).GetCompact();
 
     tx.vin[0].prevout.hash = GetRandHash();
     tx.vin[0].prevout.n = 0;
@@ -48,7 +49,7 @@ static CBlock BuildBlockTestCase() {
     bool mutated;
     block.hashMerkleRoot = BlockMerkleRoot(block, &mutated);
     assert(!mutated);
-    while (!CheckProofOfWork(block.GetHash(), block.nBits, Params().GetConsensus())) ++block.nNonce;
+    while (!CheckProofOfWork(block.GetPoWHash(), block.nBits, Params().GetConsensus())) ++block.nNonce;
     return block;
 }
 
@@ -262,13 +263,14 @@ BOOST_AUTO_TEST_CASE(EmptyBlockRoundTripTest)
     block.vtx.resize(1);
     block.vtx[0] = coinbase;
     block.nVersion = 42;
+    block.nTime = coinbase.nTime;
     block.hashPrevBlock = GetRandHash();
-    block.nBits = 0x207fffff;
+    block.nBits = UintToArith256(Params().GetConsensus().powLimit).GetCompact();
 
     bool mutated;
     block.hashMerkleRoot = BlockMerkleRoot(block, &mutated);
     assert(!mutated);
-    while (!CheckProofOfWork(block.GetHash(), block.nBits, Params().GetConsensus())) ++block.nNonce;
+    while (!CheckProofOfWork(block.GetPoWHash(), block.nBits, Params().GetConsensus())) ++block.nNonce;
 
     // Test simple header round-trip with only coinbase
     {
