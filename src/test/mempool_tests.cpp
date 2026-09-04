@@ -388,7 +388,16 @@ BOOST_AUTO_TEST_CASE(MempoolAncestorIndexingTest)
 
     pool.addUnchecked(tx6.GetHash(), entry.Fee(0LL).FromTx(tx6));
     BOOST_CHECK_EQUAL(pool.size(), 6);
-    sortedOrder.push_back(tx6.GetHash().ToString());
+
+    // tx3 and tx6 are both zero-fee transactions with equal-sized
+    // ancestor packages. The production comparator breaks that tie
+    // by transaction hash, so mirror the same ordering here.
+    if (tx3.GetHash() < tx6.GetHash()) {
+        sortedOrder.push_back(tx6.GetHash().ToString());
+    } else {
+        sortedOrder.insert(sortedOrder.end() - 1, tx6.GetHash().ToString());
+    }
+
     CheckSort<ancestor_score>(pool, sortedOrder);
 
     CMutableTransaction tx7 = CMutableTransaction();
@@ -416,7 +425,15 @@ BOOST_AUTO_TEST_CASE(MempoolAncestorIndexingTest)
     pool.removeForBlock(vtx, 1, dummy, false);
 
     sortedOrder.erase(sortedOrder.begin()+1);
-    sortedOrder.pop_back();
+
+    // Remove tx6 from whichever hash-tie position it occupied
+    // relative to the other zero-fee transaction, tx3.
+    if (tx3.GetHash() < tx6.GetHash()) {
+        sortedOrder.pop_back();
+    } else {
+        sortedOrder.erase(sortedOrder.end() - 2);
+    }
+
     sortedOrder.insert(sortedOrder.begin(), tx7.GetHash().ToString());
     CheckSort<ancestor_score>(pool, sortedOrder);
 }
