@@ -36,7 +36,7 @@ jobs:
               gh release upload "windows-x64-20260907" "HOPE-Windows-x64.zip" package/* --clobber
             else
               gh release create "windows-x64-20260907" "HOPE-Windows-x64.zip" package/* \
-                --target main \
+                --target hope-repair-final-20260904 \
                 --title "Hopium (HOPE) Windows x64 — 7 September 2026" \
                 --notes "Windows x64 binaries for Hopium (HOPE), built from the maintained Xnuva Blockchain Project source. Includes SHA-256 checksums. These binaries preserve the existing HOPE blockchain and wallet compatibility."
             fi
