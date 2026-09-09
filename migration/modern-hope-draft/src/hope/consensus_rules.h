@@ -17,6 +17,9 @@ inline constexpr unsigned int DONATION_PERCENTAGE{18};
 CAmount ProofOfWorkSubsidy(int height);
 CAmount ProofOfStakeSubsidy();
 
+CAmount CappedProofOfWorkSubsidy(int height, CAmount previous_issued, const Consensus::Params& params);
+CAmount CappedProofOfStakeSubsidy(int height, CAmount previous_issued, const Consensus::Params& params);
+
 // Historical HOPE script flags are time-based, not Bitcoin buried-deployment heights.
 script_verify_flags ScriptVerifyFlags(int64_t block_time, const Consensus::Params& params);
 
