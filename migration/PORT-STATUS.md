@@ -38,3 +38,14 @@
 ## Hard gate
 
 Nothing on this branch may be merged to the authoritative branch, released, or used as a live authoritative node until the historical-chain compatibility programme passes.
+
+
+## Supply-cap implementation
+
+- Published maximum configured: **110,000,000 HOPE**.
+- Cumulative net issued supply is tracked in the modern block index.
+- PoW/PoS fee-adjusted issuance helpers are implemented.
+- Final subsidy can be trimmed to the exact remaining mintable amount.
+- Post-activation over-cap blocks are rejected.
+- Mainnet activation height remains deliberately unset (`-1`) until live-chain issuance and tip are verified.
+- See `migration/SUPPLY-CAP.md`.
