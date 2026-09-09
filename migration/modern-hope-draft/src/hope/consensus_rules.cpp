@@ -6,6 +6,7 @@
 #include <consensus/consensus.h>
 #include <consensus/params.h>
 #include <script/interpreter.h>
+#include <hope/supply_cap.h>
 
 namespace hope {
 
@@ -18,8 +19,22 @@ CAmount ProofOfWorkSubsidy(const int height)
 
 CAmount ProofOfStakeSubsidy()
 {
-    // Preserve authoritative HOPE behaviour exactly during mechanical migration.
+    // Preserve authoritative HOPE behaviour exactly before cap activation.
     return 5 * COIN;
+}
+
+CAmount CappedProofOfWorkSubsidy(const int height,
+                                 const CAmount previous_issued,
+                                 const Consensus::Params& params)
+{
+    return LimitSubsidyBySupplyCap(height, previous_issued, ProofOfWorkSubsidy(height), params);
+}
+
+CAmount CappedProofOfStakeSubsidy(const int height,
+                                  const CAmount previous_issued,
+                                  const Consensus::Params& params)
+{
+    return LimitSubsidyBySupplyCap(height, previous_issued, ProofOfStakeSubsidy(), params);
 }
 
 script_verify_flags ScriptVerifyFlags(const int64_t block_time, const Consensus::Params& params)
