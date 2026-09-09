@@ -7,6 +7,7 @@
 #ifndef BITCOIN_CONSENSUS_PARAMS_H
 #define BITCOIN_CONSENSUS_PARAMS_H
 
+#include <consensus/amount.h>
 #include <script/verify_flags.h>
 #include <uint256.h>
 
@@ -163,6 +164,17 @@ struct Params {
     }
 
     int nLastPOWBlock{0};
+
+    // HOPE SUPPLY CAP (prospective consensus rule).
+    // Negative activation means deliberately not yet activated on that network.
+    CAmount nMaxMoneySupply{0};
+    int nSupplyCapActivationHeight{-1};
+
+    bool IsSupplyCapActive(const int height) const
+    {
+        return nSupplyCapActivationHeight >= 0 && height >= nSupplyCapActivationHeight;
+    }
+
     int nStakeTimestampMask{0};
     int nCoinbaseMaturity{100};
     int nMaxReorganizationDepth{0};
