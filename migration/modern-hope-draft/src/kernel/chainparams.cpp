@@ -241,7 +241,7 @@ public:
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
 
         bech32_hrp.clear();
-        cashaddr_prefix = "zustest";
+        cashaddr_prefix = "hopetest";
         m_dev_fund_address = "HMAYxXhvaiPP5jFHy3tdfH8eY4amu5VZHy";
 
         fDefaultConsistencyChecks = false;
@@ -323,7 +323,7 @@ public:
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x88, 0xAD, 0xE4};
 
         bech32_hrp.clear();
-        cashaddr_prefix = "zusreg";
+        cashaddr_prefix = "hopereg";
 
         fDefaultConsistencyChecks = true;
         m_is_mockable_chain = true;
