@@ -13,6 +13,12 @@
 - HOPE consensus-preservation manifest recorded.
 - The current `nLastPOWBlock = 100000000` value is explicitly preserved during migration.
 - Published 110m maximum-supply correction remains separate from mechanical modernisation.
+- Snapshotted the authoritative consensus-critical legacy files under `migration/legacy-consensus-snapshot/`.
+- Began the actual modern overlay under `migration/modern-hope-draft/`.
+- Drafted legacy transaction timestamps, coinstake/block signatures, hybrid block classification, Scrypt/version-dependent block IDs, hybrid retargeting, PoS-aware block index/UTXO metadata and stake-kernel code.
+- Drafted HOPE-specific main/test/regtest genesis, magic bytes, ports, prefixes and dev-fund identities.
+- Drafted HOPE reward/script adapter preserving 10,000,000 HOPE at block 1, 10 HOPE later PoW, 5 HOPE PoS and the 18% donation constant.
+- Added deterministic Bitcoin Core 31.1 bootstrap instructions.
 
 ## Mechanical port sequence
 
