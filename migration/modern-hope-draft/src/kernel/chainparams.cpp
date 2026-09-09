@@ -132,6 +132,12 @@ public:
         consensus.nProtocolV3Time = 1739371453;
         consensus.nProtocolV3_1Time = 4102437600;
         consensus.nLastPOWBlock = 100'000'000;
+
+        // Published HOPE maximum supply. Enforcement plumbing is complete,
+        // but activation is release-gated until live-chain issuance is proven.
+        consensus.nMaxMoneySupply = 110'000'000 * COIN;
+        consensus.nSupplyCapActivationHeight = -1; // RELEASE BLOCKER
+
         consensus.nStakeTimestampMask = 0x0f;
         consensus.nCoinbaseMaturity = 100;
         consensus.nMaxReorganizationDepth = 500;
@@ -210,6 +216,8 @@ public:
         consensus.nProtocolV3Time = 1739371453;
         consensus.nProtocolV3_1Time = 1739371454;
         consensus.nLastPOWBlock = std::numeric_limits<int>::max();
+        consensus.nMaxMoneySupply = 110'000'000 * COIN;
+        consensus.nSupplyCapActivationHeight = -1;
         consensus.nStakeTimestampMask = 0x0f;
         consensus.nCoinbaseMaturity = 10;
         consensus.nMaxReorganizationDepth = 500;
@@ -285,6 +293,8 @@ public:
         consensus.nProtocolV3Time = 1739371453;
         consensus.nProtocolV3_1Time = 4102437600;
         consensus.nLastPOWBlock = 1000;
+        consensus.nMaxMoneySupply = 110'000'000 * COIN;
+        consensus.nSupplyCapActivationHeight = -1;
         consensus.nStakeTimestampMask = 0x0f;
         consensus.nCoinbaseMaturity = 10;
         consensus.nMaxReorganizationDepth = 50;
