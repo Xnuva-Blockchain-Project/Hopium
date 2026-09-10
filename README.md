@@ -19,6 +19,20 @@ Bitcoin Core 0.13.2 with some patches from newer Bitcoin Core versions to offer 
 
 For current maintenance and release information, see https://europazeus.org. The maintained source location is https://github.com/Xnuva-Blockchain-Project/Hopium.
 
+Network bootstrap
+-----------------
+
+Until fixed-seed discovery is included in maintained clients, a fresh Hopium
+node can bootstrap from the project public node:
+
+```ini
+addnode=81.130.208.151:22536
+```
+
+The address above is the Xnuva Blockchain Project T620 node on a static public
+IPv4 address. Only the Hopium P2P port is used; RPC should not be exposed to the
+public Internet.
+
 License
 -------
 
