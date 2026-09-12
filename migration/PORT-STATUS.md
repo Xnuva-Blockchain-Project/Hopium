@@ -19,6 +19,7 @@
 - Drafted HOPE-specific main/test/regtest genesis, magic bytes, ports, prefixes and dev-fund identities.
 - Drafted HOPE reward/script adapter preserving 10,000,000 HOPE at block 1, 10 HOPE later PoW, 5 HOPE PoS and the 18% donation constant.
 - Added deterministic Bitcoin Core 31.1 bootstrap instructions.
+- Added the Europa-class chain-identity security contract and a fail-closed hybrid PoW/PoS policy scaffold. Genesis is fixed; block 1, a buried anchor and minimum-chainwork/trust floor remain deliberately unset pending live-chain qualification.
 
 ## Mechanical port sequence
 
@@ -31,14 +32,15 @@
 7. Port reward/donation accounting exactly as current source.
 8. Integrate hybrid validation into Bitcoin Core 31.1 Chainstate.
 9. Port mining, staking, wallet and RPC surfaces.
-10. Branding/packaging.
-11. Build and validate the existing chain from genesis to live tip.
-12. Separately resolve LastPOWBlock and the prospective 110,000,000 HOPE cap.
+10. Integrate the mandatory chain-identity guard into the central PoW/PoS block-building path.
+11. Branding/packaging.
+12. Build and validate the existing chain from genesis to live tip.
+13. Qualify canonical block 1, a buried live-chain anchor and minimum-work/trust floor; prove wrong-chain refusal for both PoW and PoS and positive candidate creation on the genuine chain.
+14. Separately resolve LastPOWBlock and the prospective 110,000,000 HOPE cap.
 
 ## Hard gate
 
-Nothing on this branch may be merged to the authoritative branch, released, or used as a live authoritative node until the historical-chain compatibility programme passes.
-
+Nothing on this branch may be merged to the authoritative branch, released, or used as a live authoritative node until the historical-chain compatibility programme passes **and** `migration/CHAIN-IDENTITY-SECURITY.md` has passed its negative and positive qualification tests. The policy scaffold alone is not protection; the central PoW/PoS production path must consume it.
 
 ## Supply-cap implementation
 
