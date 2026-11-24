@@ -15,3 +15,7 @@ Current consensus: Hybrid PoW / PoS; proposed name: HopiumX (HOPEX). Check relea
 
 - Identity: https://github.com/Xnuva-Blockchain-Project/Hopium/blob/hope-repair-final-20260904/PROJECT_IDENTITY.md
 - Transparency: https://github.com/Xnuva-Blockchain-Project/Hopium/blob/hope-repair-final-20260904/TRANSPARENCY.md
+
+Mainnet genesis (source-declared): 00000270333dc42277a321c31bf0107115d8d6b551279e4c13c187a36ec6e133
+Source: https://github.com/Xnuva-Blockchain-Project/Hopium/blob/hope-repair-final-20260904/src/chainparams.cpp#L158
+Live-node verification pending.
