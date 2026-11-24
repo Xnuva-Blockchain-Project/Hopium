@@ -4,7 +4,7 @@ Hopium (HOPE) is maintained by the XNUVA Blockchain Project at https://github.co
 
 Current consensus: Hybrid PoW / PoS. Proposed name: HopiumX (HOPEX). Proposed upgrades are not active merely because they are documented.
 
-Maintained existing blockchain; preservation of chain history and balances is the objective. Genesis identifier requires source and live-node verification before inclusion here.
+Maintained existing blockchain; preservation of chain history and balances is the objective. 
 
 
 - Official website: https://europazeus.org/
@@ -13,3 +13,9 @@ Maintained existing blockchain; preservation of chain history and balances is th
 - Roadmap: https://europazeus.org/randomx-roadmap.html
 
 See [transparency policy](TRANSPARENCY.md).
+
+Mainnet genesis (source-declared): `00000270333dc42277a321c31bf0107115d8d6b551279e4c13c187a36ec6e133`
+
+Source: https://github.com/Xnuva-Blockchain-Project/Hopium/blob/hope-repair-final-20260904/src/chainparams.cpp#L158
+
+Live-node RPC verification remains pending; this is not a live network health or release qualification claim.
