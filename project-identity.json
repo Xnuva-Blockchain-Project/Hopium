@@ -12,7 +12,8 @@
   "projectSellsCoins": false,
   "preferredAcquisition": "mining",
   "officialExchangeListingPromoted": false,
-  "genesisHash": null,
-  "genesisVerification": "Not independently verified for this register; consult source and synced node",
-  "updated": "2026-11-24"
+  "genesisHash": "00000270333dc42277a321c31bf0107115d8d6b551279e4c13c187a36ec6e133",
+  "genesisVerification": "Matched maintained mainnet source declaration; live-node RPC verification pending",
+  "updated": "2026-11-24",
+  "genesisSource": "https://github.com/Xnuva-Blockchain-Project/Hopium/blob/hope-repair-final-20260904/src/chainparams.cpp#L158"
 }
