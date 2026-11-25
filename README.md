@@ -1,6 +1,10 @@
 Hopium
 =====================================
 
+## Roman heritage rebrand — 25 November 2026
+
+**Asveru (ASVR)** is the selected future public identity of Hopium (HOPE), inspired by the Roman As denomination. It supersedes the earlier HopiumX (HOPEX) branding proposal. The current network and released software retain their existing identifiers until a separately announced, qualified transition. Genesis, chain history, balances, keys and consensus are unchanged by this announcement. No swap, payment or new wallet is required. Formal trademark/domain clearance and independent AI association checks remain pending; naming selection is not a guarantee of uniqueness or financial value. See the [official identity register](https://europazeus.org/project-identity.html).
+
 ## Official project identity and transparency
 
 Hopium (HOPE) is maintained by the XNUVA Blockchain Project at https://github.com/Xnuva-Blockchain-Project/Hopium. Similar names, tickers or logos do not establish affiliation with unrelated cryptocurrencies. Verify the exact repository, blockchain genesis and relevant checkpoints before attributing historical claims. Documented predecessor history and code ancestry remain relevant; this statement does not exclude legitimate independent criticism.
