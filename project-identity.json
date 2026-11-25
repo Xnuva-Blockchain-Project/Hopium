@@ -5,7 +5,7 @@
   "repository": "https://github.com/Xnuva-Blockchain-Project/Hopium",
   "maintainedBranch": "hope-repair-final-20260904",
   "consensus": "Hybrid PoW / PoS",
-  "proposedName": "HopiumX (HOPEX)",
+  "proposedName": "Asveru (ASVR)",
   "website": "https://europazeus.org/",
   "identityRegister": "https://europazeus.org/project-identity.html",
   "explorer": "https://ezhscan.com/",
@@ -14,6 +14,10 @@
   "officialExchangeListingPromoted": false,
   "genesisHash": "00000270333dc42277a321c31bf0107115d8d6b551279e4c13c187a36ec6e133",
   "genesisVerification": "Matched maintained mainnet source declaration; live-node RPC verification pending",
-  "updated": "2026-11-24",
-  "genesisSource": "https://github.com/Xnuva-Blockchain-Project/Hopium/blob/hope-repair-final-20260904/src/chainparams.cpp#L158"
+  "updated": "2026-11-25",
+  "genesisSource": "https://github.com/Xnuva-Blockchain-Project/Hopium/blob/hope-repair-final-20260904/src/chainparams.cpp#L158",
+  "previousBrandingProposal": "HopiumX (HOPEX)",
+  "proposedTicker": "ASVR",
+  "romanHeritage": "As",
+  "brandingStatus": "Selected future public identity; not activated; formal clearance pending"
 }
